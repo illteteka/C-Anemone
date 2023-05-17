@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project(anemone-alpha)
 
-file(GLOB SOURCES "*.c" "engine/*.c")
-file(GLOB HEADERS "*.h" "engine/*.h")
+file(GLOB SOURCES "*.c" "engine/*.c" "levels/*.c" "objects/*.c")
+file(GLOB HEADERS "*.h" "engine/*.h" "levels/*.h" "objects/*.h")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 

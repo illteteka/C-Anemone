@@ -5,3 +5,5 @@ build/CMakeCache.txt
 build/EBOOT.PBP
 build/Makefile
 build/PARAM.SFO
+*.DS_Store
+.DS_Store

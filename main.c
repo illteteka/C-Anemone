@@ -14,8 +14,22 @@
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 272
 
-#include "engine/video.h"
+#include "engine/ctrl.h"
+#include "engine/dev.h"
+#include "engine/gfx.h"
 #include "engine/input.h"
+#include "engine/ui.h"
+#include "engine/utils.h"
+#include "engine/video.h"
+#include "engine/window.h"
+
+#include "levels/level_test_one.h"
+#include "levels/level_test_two.h"
+
+#include "objects/blueguy.h"
+#include "objects/guy.h"
+
+#include "instances.h"
 
 /*
 	i want to know how to arbitrarily add text
