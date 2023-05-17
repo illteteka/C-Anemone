@@ -4,6 +4,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
+#include "sds.h"
+
 #include <pspkernel.h>
 #include <pspdebug.h>
 #include <pspctrl.h>
@@ -30,6 +32,7 @@
 #include "objects/guy.h"
 
 #include "instances.h"
+#include "globals.h"
 
 /*
 	i want to know how to arbitrarily add text
@@ -39,10 +42,77 @@
 	savedata?
 */
 
+// todo remove
+float x = 0;
+float y = 0;
+
+int LEVEL_SWITCH = LEVEL_TEST_1;
+float sleep = 0;
+
+int load()
+{
+	devInit();
+	ctrlInit();
+	inputInit();
+	windowInit();
+	uiInit();
+	videoInit();
+
+	instancesLoad(); // Needs to happen before loading a level
+
+	if (LEVEL_SWITCH == LEVEL_TEST_1)
+		levelTestOneInit();
+	else if (LEVEL_SWITCH == LEVEL_TEST_2)
+		levelTestTwoInit();
+
+	return 1;
+}
+
+int updateGame(float dt)
+{
+	if (LEVEL_SWITCH == LEVEL_TEST_1)
+		levelTestOneUpdate(dt);
+	else if (LEVEL_SWITCH == LEVEL_TEST_2)
+		levelTestTwoUpdate(dt);
+
+	return 1;
+}
+
+int update(float dt)
+{
+	devUpdateDebugMenu(dt);
+
+	if (sleep == 0)
+		updateGame(dt);
+	else
+		sleep = fmax(sleep - dt, 0);
+
+	return 1;
+}
+
+int drawGame()
+{
+	if (LEVEL_SWITCH == LEVEL_TEST_1)
+		levelTestOneDraw();
+	else if (LEVEL_SWITCH == LEVEL_TEST_2)
+		levelTestTwoDraw();
+
+	return 1;
+}
+
+int draw()
+{
+	windowDraw();
+
+	// Always run this last
+	devDrawDebugMenu();
+	
+	return 1;
+}
+
 int main(int argc, char *argv[])
 {
-	videoInit();
-	inputInit();
+	load();
 
 	SDL_Window *win = SDL_CreateWindow(
 	"window",
@@ -82,11 +152,20 @@ int main(int argc, char *argv[])
 
 	SDL_FreeSurface(surface);
 
+	int frames_drawn = 0;
+	uint fps_counter = 0;
+	float fps = 0.0f;
+	uint prev_ticks = SDL_GetTicks();
+
 	int running = 1;
 	SDL_Event e;
 	while (running)
 	{
-		char live_string[] = "----------------";
+		float dt = 59.0f/fmax(fps,1.0f);
+		if (dt > 10)
+		{
+			dt = 1;
+		}
 
 		if (SDL_PollEvent(&e))
 		{
@@ -100,26 +179,47 @@ int main(int argc, char *argv[])
 
 		inputUpdate();
 
-		// input test
-		if (up_key == _ON)
-			sample_32.y-=1;
+		update(dt);
 
-		if (down_key == _ON)
-			sample_32.y+=1;
+		sample_32.x = (int) x;
+		sample_32.y = (int) y;
 
-		if (left_key == _ON)
-			sample_32.x-=1;
+		text_rect.x = stick_h;
+		text_rect.y = stick_v;
 
-		if (right_key == _ON)
-			sample_32.x+=1;
+		sds mystring = sdsempty();
+		sds mystring2 = sdsnew(", ");
+		sds num = sdscatfmt(sdsempty(),"%i", stick_h);
+		sds num2 = sdscatfmt(sdsempty(),"%i", stick_v);
+		sds num3 = sdscatfmt(sdsempty(),"%i", (int) fps);
+		mystring = sdscat(mystring, num);
+		mystring = sdscat(mystring, mystring2);
+		mystring = sdscat(mystring, num2);
+		mystring = sdscat(mystring, mystring2);
+		mystring = sdscat(mystring, num3);
 
-		text_rect.x = (int) (stick_h);
-		text_rect.y = (int) (stick_v);
-
-		SDL_Surface *spr_live_surf = TTF_RenderText_Blended(font, live_string, text_color);
+		SDL_Surface *spr_live_surf = TTF_RenderText_Blended(font, mystring, text_color);
 		SDL_Texture *spr_live_text = SDL_CreateTextureFromSurface(renderer, spr_live_surf);
 		live_string_rect.w = (spr_live_surf->w);
 		live_string_rect.h = spr_live_surf->h;
+
+		if (triangle_key == _ON)
+		{
+			int lag = 0;
+			while (lag < 10000)
+			{
+				sds ohno = sdsnew(",faweafwawfawfawfawf ");
+				sdsfree(ohno);
+				lag++;
+			}
+		}
+		
+		sdsfree(num);
+		sdsfree(num2);
+		sdsfree(num3);
+		
+		sdsfree(mystring);
+		sdsfree(mystring2);
 
 		SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
 		SDL_RenderClear(renderer);
@@ -131,6 +231,18 @@ int main(int argc, char *argv[])
 
 		SDL_FreeSurface(spr_live_surf);
 		SDL_DestroyTexture(spr_live_text);
+
+		uint ticks_now = SDL_GetTicks();
+		uint diff = ticks_now - prev_ticks;
+		fps_counter += diff;
+		prev_ticks = ticks_now;
+		frames_drawn++;
+
+		if(fps_counter >= 1000) {
+			fps = (float)frames_drawn / (float)(fps_counter/1000.0f);
+			frames_drawn = 0;
+			fps_counter = 0;
+		}
 	}
 
 	SDL_DestroyRenderer(renderer);

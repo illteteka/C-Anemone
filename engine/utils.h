@@ -1,7 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-int round();
 int CheckCollision();
 int getSquare();
 int reverseString();

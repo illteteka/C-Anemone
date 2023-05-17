@@ -9,6 +9,7 @@ int videoInit()
 {
 	// Function implementation
 	// Initialize SDL2
+	// SDL_RENDERER_PRESENTVSYNC?
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("SDL2 could not be initialized!\n"

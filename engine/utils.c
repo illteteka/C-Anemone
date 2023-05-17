@@ -1,10 +1,5 @@
 #include "utils.h"
 
-int round()
-{
-	return 0;
-}
-
 int CheckCollision()
 {
 	return 0;

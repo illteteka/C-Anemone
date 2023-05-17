@@ -1,5 +1,8 @@
 #include "level_test_one.h"
 
+#include "../engine/input.h"
+#include "../globals.h"
+
 int levelTestOneLevel()
 {
 	return 0;
@@ -12,7 +15,20 @@ int levelTestOneInit()
 
 int levelTestOneUpdate(float dt)
 {
-	return 0;
+	// input test
+	if (up_key == _ON)
+		y -= 1 * dt;
+
+	if (down_key == _ON)
+		y += 1 * dt;
+
+	if (left_key == _ON)
+		x -= 1 * dt;
+
+	if (right_key == _ON)
+		x += 1 * dt;
+
+	return 1;
 }
 
 int levelTestOneDraw()

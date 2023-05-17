@@ -16,8 +16,8 @@ int l_key = _OFF;
 int r_key = _OFF;
 int start_key = _OFF;
 int select_key = _OFF;
-double stick_h;
-double stick_v;
+int stick_h;
+int stick_v;
 
 // -- Used when pausing the game
 // input.throw_away = false
