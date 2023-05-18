@@ -1,7 +1,6 @@
 #ifndef INSTANCES_H
 #define INSTANCES_H
 
-int instancesLoad();
-int instancesClear();
+int instancesInit();
 
 #endif

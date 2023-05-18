@@ -6,14 +6,14 @@
 #include <stdbool.h>
 
 #include "../globals.h"
+#include "../engine/input.h"
 
 #include "guy.h"
 
 #define MAX_GUY 8
 
-bool guyLoadOnce = false;
 SDL_Rect guy_rect = {32, 32, 32, 32};
-SDL_Texture* spr_sample_32;
+SDL_Texture* guy_local_texture = NULL;
 
 struct guy
 {
@@ -25,14 +25,8 @@ struct guy
 int guyCount = 0;
 struct guy guyData[MAX_GUY];
 
-int guyInit(SDL_Renderer *renderer)
+int guyInit()
 {
-	if (guyLoadOnce == false)
-	{
-		spr_sample_32 = IMG_LoadTexture(renderer, "assets/basic.png");
-		guyLoadOnce = true;
-	}
-
     guyCount = 0;
     memset(guyData, 0, sizeof(guyData));
 
@@ -48,26 +42,60 @@ int guyNew(float x, float y)
 	return guyCount - 1;
 }
 
-int guyDraw(SDL_Renderer *renderer)
+int guyUpdate(float dt)
 {
 	int i = 0;
 	while (i < sizeof(guyData) / sizeof(guyData[0]))
 	{
 		if (guyData[i].active)
 		{
-			guy_rect.x = (int) guyData[i].x + (int) x;
-	    	guy_rect.y = (int) guyData[i].y + (int) y;
-	    	SDL_RenderCopy(renderer, spr_sample_32, NULL, &guy_rect);
+			if (up_key == _ON)
+				guyData[i].y -= 1 * dt;
+
+			if (down_key == _ON)
+				guyData[i].y += 1 * dt;
+
+			if (left_key == _ON)
+				guyData[i].x -= 1 * dt;
+
+			if (right_key == _ON)
+				guyData[i].x += 1 * dt;
 		}
 
 	    i++;
 	}
+}
 
+int guySetTexture(SDL_Texture* texture)
+{
+	guy_local_texture = texture;
+}
+
+// todo fix
+int drawSimple(SDL_Renderer *renderer, SDL_Rect rect, SDL_Texture *texture, float x, float y)
+{
+	rect.x = (int) ((x - cameraX) * cameraZoom);
+	rect.y = (int) ((y - cameraY) * cameraZoom);
+	int w = rect.w;
+	int h = rect.h;
+	rect.w = (int) (w * cameraZoom);
+	rect.h = (int) (h * cameraZoom);
+	SDL_RenderCopy(renderer, texture, NULL, &rect);
+	rect.w = w;
+	rect.h = h;
 	return 0;
 }
 
-int guyDestroy()
+int guyDraw(SDL_Renderer *renderer)
 {
-	SDL_DestroyTexture(spr_sample_32);
+	int i = 0;
+	while (i < sizeof(guyData) / sizeof(guyData[0]))
+	{
+		if (guyData[i].active)
+			drawSimple(renderer, guy_rect, guy_local_texture, guyData[i].x, guyData[i].y);
+
+	    i++;
+	}
+
 	return 0;
 }

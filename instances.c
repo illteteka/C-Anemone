@@ -1,11 +1,12 @@
 #include "instances.h"
 
-int instancesLoad()
-{
-	return 0;
-}
+#include "objects/guy.h"
+#include "objects/blueguy.h"
 
-int instancesClear()
+int instancesInit()
 {
+	guyInit();
+	blueguyInit();
+
 	return 0;
 }

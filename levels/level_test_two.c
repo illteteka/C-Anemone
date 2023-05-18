@@ -2,6 +2,8 @@
 
 #include "level_test_two.h"
 
+#include "../globals.h"
+
 int levelTestTwoLevel()
 {
 	return 0;
@@ -9,6 +11,7 @@ int levelTestTwoLevel()
 
 int levelTestTwoInit()
 {
+	resetCamera();
 	return 0;
 }
 
