@@ -22,7 +22,6 @@
 #include "engine/input.h"
 #include "engine/ui.h"
 #include "engine/utils.h"
-#include "engine/video.h"
 #include "engine/window.h"
 
 #include "levels/level_test_one.h"
@@ -49,14 +48,16 @@ float y = 0;
 int LEVEL_SWITCH = LEVEL_TEST_1;
 float sleep = 0;
 
+SDL_Window* win;
+SDL_Renderer* renderer;
+
 int load()
 {
 	devInit();
 	ctrlInit();
 	inputInit();
-	windowInit();
 	uiInit();
-	videoInit();
+	windowInit();
 
 	instancesLoad(); // Needs to happen before loading a level
 
@@ -90,19 +91,30 @@ int update(float dt)
 	return 1;
 }
 
-int drawGame()
+int drawGame(SDL_Renderer *renderer)
 {
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
-		levelTestOneDraw();
+		levelTestOneDraw(renderer);
 	else if (LEVEL_SWITCH == LEVEL_TEST_2)
-		levelTestTwoDraw();
+		levelTestTwoDraw(renderer);
 
 	return 1;
 }
 
-int draw()
-{
-	windowDraw();
+int draw(SDL_Renderer *renderer)
+{	
+	//todo
+	//gfx.translate(round(camera.x, 0.5f), round(camera.y, 0.5f));
+	//gfx.scale(camera.zoom, camera.zoom);
+
+	SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
+	SDL_RenderClear(renderer);
+	//SDL_SetRenderDrawColor(renderer, 0xff, 0x00, 0x00, 0xff);
+	//SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
+	
+	drawGame(renderer);
+
+	SDL_RenderPresent(renderer);
 
 	// Always run this last
 	devDrawDebugMenu();
@@ -114,7 +126,9 @@ int main(int argc, char *argv[])
 {
 	load();
 
-	SDL_Window *win = SDL_CreateWindow(
+	TTF_Font *font = TTF_OpenFont("assets/font.ttf", 14);
+
+	win = SDL_CreateWindow(
 	"window",
 	SDL_WINDOWPOS_UNDEFINED,
 	SDL_WINDOWPOS_UNDEFINED,
@@ -130,27 +144,10 @@ int main(int argc, char *argv[])
 	}
 
 	SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, 0);
-	TTF_Font *font = TTF_OpenFont("assets/font.ttf", 14);
 
-	// Set the text and background color
-	SDL_Color text_color = {0x00, 0x00, 0x00, 0xff};
-
-	SDL_Rect text_rect;
-	SDL_Surface *surface = TTF_RenderText_Blended(font, "hello world", text_color);
-	SDL_Texture *spr_hello = SDL_CreateTextureFromSurface(renderer, surface);
-
-	SDL_Texture *spr_sample_32 = IMG_LoadTexture(renderer, "assets/basic.png");
-
-	// Get text dimensions
-	text_rect.w = surface->w;
-	text_rect.h = surface->h;
-	text_rect.x = (SCREEN_WIDTH - text_rect.w) / 2;
-	text_rect.y = text_rect.h + 30;
-
-	SDL_Rect sample_32 = {32, 32, 32, 32};
-	SDL_Rect live_string_rect = {64, 64, 32, 32};
-
-	SDL_FreeSurface(surface);
+	// todo remove
+	guyInit(renderer);
+	levelTestOneLevel();
 
 	int frames_drawn = 0;
 	uint fps_counter = 0;
@@ -178,59 +175,8 @@ int main(int argc, char *argv[])
 		}
 
 		inputUpdate();
-
 		update(dt);
-
-		sample_32.x = (int) x;
-		sample_32.y = (int) y;
-
-		text_rect.x = stick_h;
-		text_rect.y = stick_v;
-
-		sds mystring = sdsempty();
-		sds mystring2 = sdsnew(", ");
-		sds num = sdscatfmt(sdsempty(),"%i", stick_h);
-		sds num2 = sdscatfmt(sdsempty(),"%i", stick_v);
-		sds num3 = sdscatfmt(sdsempty(),"%i", (int) fps);
-		mystring = sdscat(mystring, num);
-		mystring = sdscat(mystring, mystring2);
-		mystring = sdscat(mystring, num2);
-		mystring = sdscat(mystring, mystring2);
-		mystring = sdscat(mystring, num3);
-
-		SDL_Surface *spr_live_surf = TTF_RenderText_Blended(font, mystring, text_color);
-		SDL_Texture *spr_live_text = SDL_CreateTextureFromSurface(renderer, spr_live_surf);
-		live_string_rect.w = (spr_live_surf->w);
-		live_string_rect.h = spr_live_surf->h;
-
-		if (triangle_key == _ON)
-		{
-			int lag = 0;
-			while (lag < 10000)
-			{
-				sds ohno = sdsnew(",faweafwawfawfawfawf ");
-				sdsfree(ohno);
-				lag++;
-			}
-		}
-		
-		sdsfree(num);
-		sdsfree(num2);
-		sdsfree(num3);
-		
-		sdsfree(mystring);
-		sdsfree(mystring2);
-
-		SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
-		SDL_RenderClear(renderer);
-		SDL_SetRenderDrawColor(renderer, 0xff, 0x00, 0x00, 0xff);
-		SDL_RenderCopy(renderer, spr_sample_32, NULL, &sample_32);
-		SDL_RenderCopy(renderer, spr_hello, NULL, &text_rect);
-		SDL_RenderCopy(renderer, spr_live_text, NULL, &live_string_rect);
-		SDL_RenderPresent(renderer);
-
-		SDL_FreeSurface(spr_live_surf);
-		SDL_DestroyTexture(spr_live_text);
+		draw(renderer);
 
 		uint ticks_now = SDL_GetTicks();
 		uint diff = ticks_now - prev_ticks;
@@ -247,8 +193,6 @@ int main(int argc, char *argv[])
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(win);
-	SDL_DestroyTexture(spr_hello);
-	SDL_DestroyTexture(spr_sample_32);
 	TTF_CloseFont(font);
 	TTF_Quit();
 	SDL_Quit();

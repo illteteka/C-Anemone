@@ -5,7 +5,7 @@ int blueguyInit()
 	return 0;
 }
 
-int blueguyNew(int x, int y)
+int blueguyNew(float x, float y)
 {
 	return 0;
 }

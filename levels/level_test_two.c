@@ -1,3 +1,5 @@
+#include <SDL2/SDL.h>
+
 #include "level_test_two.h"
 
 int levelTestTwoLevel()
@@ -15,7 +17,7 @@ int levelTestTwoUpdate(float dt)
 	return 0;
 }
 
-int levelTestTwoDraw()
+int levelTestTwoDraw(SDL_Renderer *renderer)
 {
 	return 0;
 }
