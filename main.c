@@ -40,25 +40,25 @@ SDL_Texture* spr_sample_32;
 
 int LEVEL_SWITCH = LEVEL_TEST_1;
 
-int resetCamera()
+void resetCamera()
 {
 	cameraX = 0.0;
 	cameraY = 0.0;
 	cameraZoom = 1.0;
 }
 
-int loadTextures(SDL_Renderer *renderer)
+void loadTextures(SDL_Renderer *renderer)
 {
 	spr_sample_32 = IMG_LoadTexture(renderer, "assets/basic.png");
 	guySetTexture(spr_sample_32);
 }
 
-int destroyTextures()
+void destroyTextures()
 {
 	SDL_DestroyTexture(spr_sample_32);
 }
 
-int load()
+void load()
 {
 	devInit();
 	inputInit();
@@ -70,21 +70,17 @@ int load()
 		levelTestOneInit();
 	else if (LEVEL_SWITCH == LEVEL_TEST_2)
 		levelTestTwoInit();
-
-	return 1;
 }
 
-int updateGame(float dt)
+void updateGame(float dt)
 {
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
 		levelTestOneUpdate(dt);
 	else if (LEVEL_SWITCH == LEVEL_TEST_2)
 		levelTestTwoUpdate(dt);
-
-	return 1;
 }
 
-int update(float dt)
+void update(float dt)
 {
 	devUpdateDebugMenu(dt);
 
@@ -94,21 +90,17 @@ int update(float dt)
 		updateGame(dt);
 	else
 		sleep = fmax(sleep - dt, 0);
-
-	return 1;
 }
 
-int drawGame(SDL_Renderer *renderer)
+void drawGame(SDL_Renderer *renderer)
 {
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
 		levelTestOneDraw(renderer);
 	else if (LEVEL_SWITCH == LEVEL_TEST_2)
 		levelTestTwoDraw(renderer);
-
-	return 1;
 }
 
-int draw(SDL_Renderer *renderer, TTF_Font *font, float fps)
+void draw(SDL_Renderer *renderer, TTF_Font *font, float fps)
 {	
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
@@ -118,8 +110,6 @@ int draw(SDL_Renderer *renderer, TTF_Font *font, float fps)
 	devDrawDebugMenu(renderer, font, fps);
 
 	SDL_RenderPresent(renderer);
-	
-	return 1;
 }
 
 int main(int argc, char *argv[])

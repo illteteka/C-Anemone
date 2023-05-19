@@ -15,6 +15,6 @@ extern float sleep;
 extern float cameraX;
 extern float cameraY;
 extern float cameraZoom;
-int resetCamera();
+void resetCamera();
 
 #endif
