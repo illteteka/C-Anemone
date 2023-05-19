@@ -144,6 +144,7 @@ int main(int argc, char *argv[])
 	}
 
 	SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, 0);
+	SDL_RenderSetVSync(renderer, 1);
 
 	loadTextures(renderer);
 

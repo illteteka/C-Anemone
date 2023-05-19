@@ -28,12 +28,54 @@ void gfxRectangle(SDL_Renderer *renderer, int x, int y, int w, int h)
 	SDL_RenderFillRect(renderer, &temp_rect);
 }
 
-void gfxTriangle()
+void gfxRectangleRel(SDL_Renderer *renderer, int x, int y, int w, int h)
 {
+	int xx = (int) ((x - cameraX) * cameraZoom);
+	int yy = (int) ((y - cameraY) * cameraZoom);
+	int ww = (int) (w * cameraZoom);
+	int hh = (int) (h * cameraZoom);
+	gfxRectangle(renderer, xx, yy, ww, hh);
 }
 
-void gfxLine()
+void gfxTriangle(SDL_Renderer *renderer, int x, int y, int x2, int y2, int x3, int y3)
 {
+	SDL_Vertex vertex_1 = {{x, y}, {gfxColor.r, gfxColor.g, gfxColor.b, 255}, {1, 1}};
+	SDL_Vertex vertex_2 = {{x2, y2}, {gfxColor.r, gfxColor.g, gfxColor.b, 255}, {1, 1}};
+	SDL_Vertex vertex_3 = {{x3, y3}, {gfxColor.r, gfxColor.g, gfxColor.b, 255}, {1, 1}};
+
+	SDL_Vertex vertices[] = {
+	    vertex_1,
+	    vertex_2,
+	    vertex_3
+	};
+
+	SDL_RenderGeometry(renderer, NULL, vertices, 3, NULL, 0);
+}
+
+void gfxTriangleRel(SDL_Renderer *renderer, int x, int y, int x2, int y2, int x3, int y3)
+{
+	int xx = (int) ((x - cameraX) * cameraZoom);
+	int yy = (int) ((y - cameraY) * cameraZoom);
+	int xx2 = (int) ((x2 - cameraX) * cameraZoom);
+	int yy2 = (int) ((y2 - cameraY) * cameraZoom);
+	int xx3 = (int) ((x3 - cameraX) * cameraZoom);
+	int yy3 = (int) ((y3 - cameraY) * cameraZoom);
+	gfxTriangle(renderer, xx, yy, xx2, yy2, xx3, yy3);
+}
+
+void gfxLine(SDL_Renderer *renderer, int x, int y, int x2, int y2)
+{
+	SDL_SetRenderDrawColor(renderer, gfxColor.r, gfxColor.g, gfxColor.b, 255);
+	SDL_RenderDrawLine(renderer, x, y, x2, y2);
+}
+
+void gfxLineRel(SDL_Renderer *renderer, int x, int y, int x2, int y2)
+{
+	int xx = (int) ((x - cameraX) * cameraZoom);
+	int yy = (int) ((y - cameraY) * cameraZoom);
+	int xx2 = (int) ((x2 - cameraX) * cameraZoom);
+	int yy2 = (int) ((y2 - cameraY) * cameraZoom);
+	gfxLine(renderer, xx, yy, xx2, yy2);
 }
 
 int gfxGetTextWidth(SDL_Renderer *renderer, TTF_Font *font, sds str)

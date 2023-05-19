@@ -5,6 +5,7 @@
 
 #include "../objects/guy.h"
 #include "../engine/input.h"
+#include "../engine/gfx.h"
 #include "../globals.h"
 #include "../sds.h"
 #include "../instances.h"
@@ -90,4 +91,10 @@ void levelTestOneUpdate(float dt)
 void levelTestOneDraw(SDL_Renderer *renderer)
 {
 	guyDraw(renderer);
+
+	gfxSetColor(0,255,0);
+	gfxTriangleRel(renderer, 379, 61, 453, 66, 381, 178);
+
+	gfxSetColor(184,148,237);
+	gfxLineRel(renderer, 99, 40, 94, 111);
 }

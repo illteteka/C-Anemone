@@ -11,8 +11,11 @@
 
 void gfxSetColor(int r, int g, int b);
 void gfxRectangle(SDL_Renderer *renderer, int x, int y, int w, int h);
-void gfxTriangle();
-void gfxLine();
+void gfxRectangleRel(SDL_Renderer *renderer, int x, int y, int w, int h);
+void gfxTriangle(SDL_Renderer *renderer, int x, int y, int x2, int y2, int x3, int y3);
+void gfxTriangleRel(SDL_Renderer *renderer, int x, int y, int x2, int y2, int x3, int y3);
+void gfxLine(SDL_Renderer *renderer, int x, int y, int x2, int y2);
+void gfxLineRel(SDL_Renderer *renderer, int x, int y, int x2, int y2);
 int gfxGetTextWidth(SDL_Renderer *renderer, TTF_Font *font, sds str);
 void gfxPrint(SDL_Renderer *renderer, TTF_Font *font, sds str, int x, int y);
 void gfxPrintRel(SDL_Renderer *renderer, TTF_Font *font, sds str, float x, float y, float scale);
