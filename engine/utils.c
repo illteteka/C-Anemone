@@ -1,51 +1,124 @@
 #include "utils.h"
+#include "../sds.h"
+#include <math.h>
 
-int CheckCollision()
+int CheckCollision(float x1,float y1,float w1,float h1, float x2,float y2,float w2,float h2)
 {
-	return 0;
+	return (x1 < x2+w2 && x2 < x1+w1 && y1 < y2+h2 && y2 < y1+h1);
 }
 
-int getSquare()
+int getSquare(int n)
 {
-	return 0;
+	int p = 1;
+	while (p < n)
+	{
+		p *= 2;
+	}
+	return p;
 }
 
-int reverseString()
+void reverseString(sds str)
 {
-	return 0;
+	int length = sdslen(str);
+	int i, j;
+	for (i = 0, j = length - 1; i < j; i++, j--)
+	{
+		char temp = str[i];
+		str[i] = str[j];
+		str[j] = temp;
+	}
 }
 
-int lengthdir_x()
+float lengthdir_x(float length, float dir)
 {
-	return 0;
+	return length * cos(dir);
 }
 
-int lengthdir_y()
+float lengthdir_y(float length, float dir)
 {
-	return 0;
+	return -length * sin(dir);
 }
 
-int point_direction()
+float point_direction(float x1, float y1, float x2, float y2)
 {
-	return 0;
+	return atan2(y2 - y1, x2 - x1);
 }
 
-int sign()
+int sign(int x)
 {
-	return 0;
+	if (x == 0)
+		return 0;
+	else
+		return (x < 0) ? -1 : 1;
 }
 
-int clamp()
+float clamp(float x, float min, float max)
 {
-	return 0;
+	if (x < min)
+		return min;
+	else if (x > max)
+		return max;
+	else
+		return x;
 }
 
-int lerp()
+float lerp(float a, float b, float amount)
 {
-	return 0;
+	return a + (b - a) * clamp(amount, 0, 1);
 }
 
-int hsl()
+void hsl(int h, int s, int l, int a, int *rgb)
 {
-	return 0;
+	if (s <= 0)
+	{
+		rgb[0] = rgb[1] = rgb[2] = 255;
+		return;
+	}
+
+	float H = h / 256.0f * 6.0f;
+	float S = s / 255.0f;
+	float L = l / 255.0f;
+
+	float C = (1 - fabsf(2 * L - 1)) * S;
+	float X = C * (1 - fabsf(fmodf(H, 2) - 1));
+	float m = L - C / 2.0f;
+
+	float r, g, b;
+
+	switch ((int)H) {
+		case 0:
+			r = C;
+			g = X;
+			b = 0;
+			break;
+		case 1:
+			r = X;
+			g = C;
+			b = 0;
+			break;
+		case 2:
+			r = 0;
+			g = C;
+			b = X;
+			break;
+		case 3:
+			r = 0;
+			g = X;
+			b = C;
+			break;
+		case 4:
+			r = X;
+			g = 0;
+			b = C;
+			break;
+		default:
+			r = C;
+			g = 0;
+			b = X;
+			break;
+	}
+
+	rgb[0] = (int)((r + m) * 255);
+	rgb[1] = (int)((g + m) * 255);
+	rgb[2] = (int)((b + m) * 255);
 }

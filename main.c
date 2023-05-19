@@ -19,26 +19,16 @@
 #include "engine/dev.h"
 #include "engine/gfx.h"
 #include "engine/input.h"
-#include "engine/ui.h"
 #include "engine/utils.h"
 #include "engine/window.h"
 
 #include "levels/level_test_one.h"
 #include "levels/level_test_two.h"
 
-#include "objects/blueguy.h"
 #include "objects/guy.h"
 
 #include "instances.h"
 #include "globals.h"
-
-/*
-	i want to know how to arbitrarily add text
-	i want better file management
-	anemone port
-	audio?
-	savedata?
-*/
 
 float cameraX = 0.0;
 float cameraY = 0.0;
@@ -52,7 +42,6 @@ SDL_Renderer* renderer;
 SDL_Texture* spr_sample_32;
 
 int LEVEL_SWITCH = LEVEL_TEST_1;
-bool DEBUG_MODE = true;
 
 int resetCamera()
 {
@@ -76,7 +65,6 @@ int load()
 {
 	devInit();
 	inputInit();
-	uiInit();
 	windowInit();
 
 	instancesInit(); // Needs to happen before loading a level
@@ -104,7 +92,6 @@ int update(float dt)
 	devUpdateDebugMenu(dt);
 
 	inputUpdate(dt);
-	uiUpdate(dt);
 
 	if (sleep == 0)
 		updateGame(dt);
@@ -126,7 +113,7 @@ int drawGame(SDL_Renderer *renderer)
 
 int draw(SDL_Renderer *renderer, TTF_Font *font, float fps)
 {	
-	SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
 	
 	drawGame(renderer);

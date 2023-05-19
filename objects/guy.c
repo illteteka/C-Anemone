@@ -7,12 +7,12 @@
 
 #include "../globals.h"
 #include "../engine/input.h"
+#include "../engine/gfx.h"
 
 #include "guy.h"
 
-#define MAX_GUY 8
+#define MAX_GUY 32
 
-SDL_Rect guy_rect = {32, 32, 32, 32};
 SDL_Texture* guy_local_texture = NULL;
 
 struct guy
@@ -71,28 +71,13 @@ int guySetTexture(SDL_Texture* texture)
 	guy_local_texture = texture;
 }
 
-// todo fix
-int drawSimple(SDL_Renderer *renderer, SDL_Rect rect, SDL_Texture *texture, float x, float y)
-{
-	rect.x = (int) ((x - cameraX) * cameraZoom);
-	rect.y = (int) ((y - cameraY) * cameraZoom);
-	int w = rect.w;
-	int h = rect.h;
-	rect.w = (int) (w * cameraZoom);
-	rect.h = (int) (h * cameraZoom);
-	SDL_RenderCopy(renderer, texture, NULL, &rect);
-	rect.w = w;
-	rect.h = h;
-	return 0;
-}
-
 int guyDraw(SDL_Renderer *renderer)
 {
 	int i = 0;
 	while (i < sizeof(guyData) / sizeof(guyData[0]))
 	{
 		if (guyData[i].active)
-			drawSimple(renderer, guy_rect, guy_local_texture, guyData[i].x, guyData[i].y);
+			gfxDrawImageRel(renderer, guy_local_texture, guyData[i].x, guyData[i].y, 32, 32);
 
 	    i++;
 	}

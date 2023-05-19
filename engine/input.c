@@ -19,10 +19,6 @@ int select_key = _OFF;
 int stick_h;
 int stick_v;
 
-// -- Used when pausing the game
-// input.throw_away = false
-// input.throw_away_timer = 0
-
 int inputInit()
 {
 	sceCtrlSetSamplingCycle(0);
@@ -33,10 +29,6 @@ int inputPullSwitch(bool a, int b, bool ignore)
 {
 	int output = b;
 
-	//if (!ignore) // (input.throw_away && !ignore)
-	//	output = _OFF;
-	//else
-	//{
 	// Main input code
 	if (a==true)
 	{
@@ -53,7 +45,6 @@ int inputPullSwitch(bool a, int b, bool ignore)
 			output = _OFF;
 	}
 	// End main input code	
-	//}
 
 	return output;
 }
