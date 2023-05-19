@@ -1,6 +1,6 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-int windowInit();
+void windowInit();
 
 #endif

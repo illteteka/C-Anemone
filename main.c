@@ -13,9 +13,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 272
-
 #include "engine/dev.h"
 #include "engine/gfx.h"
 #include "engine/input.h"

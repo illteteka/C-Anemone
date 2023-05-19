@@ -22,8 +22,8 @@ extern int start_key;
 extern int select_key;
 extern int stick_h;
 extern int stick_v;
-int inputInit();
+void inputInit();
 int inputPullSwitch(bool a, int b, bool ignore);
-int inputUpdate();
+void inputUpdate();
 
 #endif

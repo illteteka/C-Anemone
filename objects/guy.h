@@ -3,10 +3,10 @@
 #ifndef OBJ_GUY_H
 #define OBJ_GUY_H
 
-int guyInit();
+void guyInit();
 int guyNew(float x, float y);
-int guyUpdate(float dt);
-int guySetTexture(SDL_Texture* texture);
-int guyDraw(SDL_Renderer *renderer);
+void guyUpdate(float dt);
+void guySetTexture(SDL_Texture* texture);
+void guyDraw(SDL_Renderer *renderer);
 
 #endif

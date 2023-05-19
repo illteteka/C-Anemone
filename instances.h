@@ -1,6 +1,6 @@
 #ifndef INSTANCES_H
 #define INSTANCES_H
 
-int instancesInit();
+void instancesInit();
 
 #endif

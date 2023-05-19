@@ -25,12 +25,10 @@ struct guy
 int guyCount = 0;
 struct guy guyData[MAX_GUY];
 
-int guyInit()
+void guyInit()
 {
     guyCount = 0;
     memset(guyData, 0, sizeof(guyData));
-
-    return 0;
 }
 
 int guyNew(float x, float y)
@@ -42,7 +40,7 @@ int guyNew(float x, float y)
 	return guyCount - 1;
 }
 
-int guyUpdate(float dt)
+void guyUpdate(float dt)
 {
 	int i = 0;
 	while (i < sizeof(guyData) / sizeof(guyData[0]))
@@ -66,12 +64,12 @@ int guyUpdate(float dt)
 	}
 }
 
-int guySetTexture(SDL_Texture* texture)
+void guySetTexture(SDL_Texture* texture)
 {
 	guy_local_texture = texture;
 }
 
-int guyDraw(SDL_Renderer *renderer)
+void guyDraw(SDL_Renderer *renderer)
 {
 	int i = 0;
 	while (i < sizeof(guyData) / sizeof(guyData[0]))
@@ -81,6 +79,4 @@ int guyDraw(SDL_Renderer *renderer)
 
 	    i++;
 	}
-
-	return 0;
 }

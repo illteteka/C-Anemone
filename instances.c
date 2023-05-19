@@ -2,9 +2,7 @@
 
 #include "objects/guy.h"
 
-int instancesInit()
+void instancesInit()
 {
 	guyInit();
-
-	return 0;
 }

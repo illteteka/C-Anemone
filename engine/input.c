@@ -19,7 +19,7 @@ int select_key = _OFF;
 int stick_h;
 int stick_v;
 
-int inputInit()
+void inputInit()
 {
 	sceCtrlSetSamplingCycle(0);
 	sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
@@ -49,7 +49,7 @@ int inputPullSwitch(bool a, int b, bool ignore)
 	return output;
 }
 
-int inputUpdate()
+void inputUpdate()
 {
 	sceCtrlReadBufferPositive(&pad, 1);
 
@@ -68,6 +68,4 @@ int inputUpdate()
 	r_key = inputPullSwitch((pad.Buttons & PSP_CTRL_RTRIGGER), r_key, false);
 	start_key = inputPullSwitch((pad.Buttons & PSP_CTRL_START), start_key, false);
 	select_key = inputPullSwitch((pad.Buttons & PSP_CTRL_SELECT), select_key, false);
-
-	return 1;
 }

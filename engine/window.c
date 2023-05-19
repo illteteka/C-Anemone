@@ -5,7 +5,7 @@
 
 #include "window.h"
 
-int windowInit()
+void windowInit()
 {
 	// Function implementation
 	// Initialize SDL2
@@ -14,7 +14,6 @@ int windowInit()
 		printf("SDL2 could not be initialized!\n"
 		"SDL2 Error: %s\n",
 		SDL_GetError());
-		return 0;
 	}
 
 	// Initialize SDL2_ttf
@@ -23,8 +22,5 @@ int windowInit()
 		printf("SDL2_ttf could not be initialized!\n"
 		"SDL2_ttf Error: %s\n",
 		SDL_GetError());
-		return 0;
 	}
-
-	return 0;
 }

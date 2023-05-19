@@ -3,9 +3,9 @@
 #ifndef LVL_TEST_ONE_H
 #define LVL_TEST_ONE_H
 
-int levelTestOneLevel();
-int levelTestOneInit();
-int levelTestOneUpdate(float dt);
-int levelTestOneDraw(SDL_Renderer *renderer);
+void levelTestOneLevel();
+void levelTestOneInit();
+void levelTestOneUpdate(float dt);
+void levelTestOneDraw(SDL_Renderer *renderer);
 
 #endif

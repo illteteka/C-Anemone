@@ -10,21 +10,18 @@
 
 bool devDebugWindow = false;
 
-int devInit()
+void devInit()
 {
 	devDebugWindow = true;
-	return 0;
 }
 
-int devUpdateDebugMenu(float dt)
+void devUpdateDebugMenu(float dt)
 {
 	if (select_key == _PRESS)
 		devDebugWindow = !devDebugWindow;
-
-	return 0;
 }
 
-int devDrawDebugMenu(SDL_Renderer *renderer, TTF_Font *font, float fps)
+void devDrawDebugMenu(SDL_Renderer *renderer, TTF_Font *font, float fps)
 {
 	if (devDebugWindow)
 	{
@@ -35,6 +32,4 @@ int devDrawDebugMenu(SDL_Renderer *renderer, TTF_Font *font, float fps)
 		gfxSetColor(255, 255, 255);
 		gfxPrint(renderer, font, fps_string, 8, 8);
 	}
-
-	return 0;
 }

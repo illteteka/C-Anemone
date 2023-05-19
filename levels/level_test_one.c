@@ -9,9 +9,8 @@
 #include "../sds.h"
 #include "../instances.h"
 
-int levelTestOneLevel()
+void levelTestOneLevel()
 {
-
 	guyNew(83, 99);
 	guyNew(369, 93);
 	guyNew(95, 219);
@@ -37,21 +36,17 @@ int levelTestOneLevel()
 	guyNew(357, 215);
 	guyNew(362, 204);
 	guyNew(362, 204);
-
-	return 0;
 }
 
-int levelTestOneInit()
+void levelTestOneInit()
 {
 	LEVEL_SWITCH = LEVEL_TEST_1;
 	instancesInit();
 	levelTestOneLevel();
 	resetCamera();
-
-	return 0;
 }
 
-int levelTestOneUpdate(float dt)
+void levelTestOneUpdate(float dt)
 {
 	guyUpdate(dt);
 
@@ -90,14 +85,9 @@ int levelTestOneUpdate(float dt)
 
 	if (r_key == _PRESS)
 		cameraZoom += 0.1;
-
-
-	return 1;
 }
 
-int levelTestOneDraw(SDL_Renderer *renderer)
+void levelTestOneDraw(SDL_Renderer *renderer)
 {
 	guyDraw(renderer);
-
-	return 0;
 }

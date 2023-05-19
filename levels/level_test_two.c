@@ -9,26 +9,21 @@
 #include "../sds.h"
 #include "../instances.h"
 
-int levelTestTwoLevel()
+void levelTestTwoLevel()
 {
-
 	guyNew(32, 32);
 	guyNew(64, 64);
-
-	return 0;
 }
 
-int levelTestTwoInit()
+void levelTestTwoInit()
 {
 	LEVEL_SWITCH = LEVEL_TEST_2;
 	instancesInit();
 	levelTestTwoLevel();
 	resetCamera();
-
-	return 0;
 }
 
-int levelTestTwoUpdate(float dt)
+void levelTestTwoUpdate(float dt)
 {
 	guyUpdate(dt);
 
@@ -36,13 +31,9 @@ int levelTestTwoUpdate(float dt)
 	{
 		levelTestOneInit();
 	}
-
-	return 1;
 }
 
-int levelTestTwoDraw(SDL_Renderer *renderer)
+void levelTestTwoDraw(SDL_Renderer *renderer)
 {
 	guyDraw(renderer);
-
-	return 0;
 }
