@@ -1,6 +1,4 @@
-#include "instances.h"
-
-#include "objects/guy.h"
+#include "include.h"
 
 void instancesInit()
 {

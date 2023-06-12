@@ -1,60 +1,39 @@
-#include <stdio.h>
+#include "include.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
-
-#include "sds.h"
-
-#include <pspkernel.h>
-#include <pspdebug.h>
-#include <pspctrl.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
-#include "engine/dev.h"
-#include "engine/gfx.h"
-#include "engine/input.h"
-#include "engine/utils.h"
-#include "engine/window.h"
-
-#include "levels/level_test_one.h"
-#include "levels/level_test_two.h"
-
-#include "objects/guy.h"
-
-#include "instances.h"
-#include "globals.h"
-
-float cameraX = 0.0;
-float cameraY = 0.0;
-float cameraZoom = 1.0;
+float cameraX = 0;
+float cameraY = 0;
+float cameraZoom = 1;
 
 float sleep = 0;
 
 SDL_Window* win;
 SDL_Renderer* renderer;
 
+SDL_Texture* spr_font;
 SDL_Texture* spr_sample_32;
 
 int LEVEL_SWITCH = LEVEL_TEST_1;
 
 void resetCamera()
 {
-	cameraX = 0.0;
-	cameraY = 0.0;
-	cameraZoom = 1.0;
+	cameraX = 0;
+	cameraY = 0;
+	cameraZoom = 1;
 }
 
 void loadTextures(SDL_Renderer *renderer)
 {
+	spr_font = IMG_LoadTexture(renderer, "assets/font.png");
+	gfxFontSetTexture(spr_font);
+	gfxFontLoadRects();
+
 	spr_sample_32 = IMG_LoadTexture(renderer, "assets/basic.png");
 	guySetTexture(spr_sample_32);
 }
 
 void destroyTextures()
 {
+	SDL_DestroyTexture(spr_font);
 	SDL_DestroyTexture(spr_sample_32);
 }
 
@@ -62,14 +41,6 @@ void load()
 {
 	devInit();
 	inputInit();
-	windowInit();
-
-	instancesInit(); // Needs to happen before loading a level
-
-	if (LEVEL_SWITCH == LEVEL_TEST_1)
-		levelTestOneInit();
-	else if (LEVEL_SWITCH == LEVEL_TEST_2)
-		levelTestTwoInit();
 }
 
 void updateGame(float dt)
@@ -92,31 +63,40 @@ void update(float dt)
 		sleep = fmax(sleep - dt, 0);
 }
 
-void drawGame(SDL_Renderer *renderer)
+void drawGame()
 {
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
-		levelTestOneDraw(renderer);
+		levelTestOneDraw();
 	else if (LEVEL_SWITCH == LEVEL_TEST_2)
-		levelTestTwoDraw(renderer);
+		levelTestTwoDraw();
 }
 
-void draw(SDL_Renderer *renderer, TTF_Font *font, float fps)
+void draw(SDL_Renderer *renderer, float fps)
 {	
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
 	
-	drawGame(renderer);
+	drawGame();
 
-	devDrawDebugMenu(renderer, font, fps);
+	devDrawDebugMenu(fps);
 
 	SDL_RenderPresent(renderer);
 }
 
 int main(int argc, char *argv[])
 {
-	load();
+	srand(time(NULL));
+	
+	// Function implementation
+	// Initialize SDL2
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		printf("SDL2 could not be initialized!\n"
+		"SDL2 Error: %s\n",
+		SDL_GetError());
+	}
 
-	TTF_Font *font = TTF_OpenFont("assets/font.ttf", 14);
+	load();
 
 	win = SDL_CreateWindow(
 	"window",
@@ -135,8 +115,14 @@ int main(int argc, char *argv[])
 
 	SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, 0);
 	SDL_RenderSetVSync(renderer, 1);
+	gfxSetRenderer(renderer);
 
 	loadTextures(renderer);
+	
+	if (LEVEL_SWITCH == LEVEL_TEST_1)
+		levelTestOneInit();
+	else if (LEVEL_SWITCH == LEVEL_TEST_2)
+		levelTestTwoInit();
 
 	int frames_drawn = 0;
 	uint fps_counter = 0;
@@ -164,7 +150,7 @@ int main(int argc, char *argv[])
 		}
 
 		update(dt);
-		draw(renderer, font, fps);
+		draw(renderer, fps);
 
 		uint ticks_now = SDL_GetTicks();
 		uint diff = ticks_now - prev_ticks;
@@ -180,11 +166,10 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	gfxFontFree();
 	destroyTextures();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(win);
-	TTF_CloseFont(font);
-	TTF_Quit();
 	SDL_Quit();
 
 	return 0;

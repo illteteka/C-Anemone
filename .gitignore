@@ -1,5 +1,5 @@
 build/CMakeFiles
-build/anemone-alpha
+build/becher-bar
 build/cmake_install.cmake
 build/CMakeCache.txt
 build/EBOOT.PBP
@@ -7,3 +7,4 @@ build/Makefile
 build/PARAM.SFO
 *.DS_Store
 .DS_Store
+*.sav

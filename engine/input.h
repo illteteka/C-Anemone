@@ -1,8 +1,6 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <stdbool.h>
-
 #define _OFF 0
 #define _ON 1
 #define _PRESS 2

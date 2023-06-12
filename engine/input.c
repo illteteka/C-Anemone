@@ -1,6 +1,4 @@
-#include <pspctrl.h>
-#include <stdbool.h>
-#include "input.h"
+#include "../include.h"
 
 SceCtrlData pad;
 

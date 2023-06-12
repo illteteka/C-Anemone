@@ -1,6 +1,4 @@
-#include "utils.h"
-#include "../sds.h"
-#include <math.h>
+#include "../include.h"
 
 int CheckCollision(float x1,float y1,float w1,float h1, float x2,float y2,float w2,float h2)
 {
@@ -17,9 +15,9 @@ int getSquare(int n)
 	return p;
 }
 
-void reverseString(sds str)
+void reverseString(char* str)
 {
-	int length = sdslen(str);
+	int length = strlen(str);
 	int i, j;
 	for (i = 0, j = length - 1; i < j; i++, j--)
 	{
@@ -46,10 +44,7 @@ float point_direction(float x1, float y1, float x2, float y2)
 
 int sign(int x)
 {
-	if (x == 0)
-		return 0;
-	else
-		return (x < 0) ? -1 : 1;
+	return (x < 0) ? -1 : 1;
 }
 
 float clamp(float x, float min, float max)
@@ -67,11 +62,11 @@ float lerp(float a, float b, float amount)
 	return a + (b - a) * clamp(amount, 0, 1);
 }
 
-void hsl(int h, int s, int l, int a, int *rgb)
+void hsl(int h, int s, int l)
 {
 	if (s <= 0)
 	{
-		rgb[0] = rgb[1] = rgb[2] = 255;
+		gfxSetColor(255, 255, 255);
 		return;
 	}
 
@@ -118,7 +113,5 @@ void hsl(int h, int s, int l, int a, int *rgb)
 			break;
 	}
 
-	rgb[0] = (int)((r + m) * 255);
-	rgb[1] = (int)((g + m) * 255);
-	rgb[2] = (int)((b + m) * 255);
+	gfxSetColor((int)((r + m) * 255), (int)((g + m) * 255), (int)((b + m) * 255));
 }

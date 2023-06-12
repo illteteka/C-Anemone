@@ -1,18 +1,11 @@
-#include "dev.h"
-#include "input.h"
-#include "gfx.h"
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <stdbool.h>
-#include "../sds.h"
-#include "../globals.h"
+#include "../include.h"
 
 bool devDebugWindow = false;
+char fps_string[8] = "";
 
 void devInit()
 {
-	devDebugWindow = true;
+	devDebugWindow = false;
 }
 
 void devUpdateDebugMenu(float dt)
@@ -21,15 +14,15 @@ void devUpdateDebugMenu(float dt)
 		devDebugWindow = !devDebugWindow;
 }
 
-void devDrawDebugMenu(SDL_Renderer *renderer, TTF_Font *font, float fps)
+void devDrawDebugMenu(float fps)
 {
 	if (devDebugWindow)
 	{
-		sds fps_string = sdscatfmt(sdsempty(),"fps: %i", (int) fps);
+		snprintf(fps_string, sizeof(fps_string), "fps: %i", (int)fps);
 
 		gfxSetColor(0, 0, 255);
-		gfxRectangle(renderer,0,0,72,32);
+		gfxRectangle(0,0,72,32);
 		gfxSetColor(255, 255, 255);
-		gfxPrint(renderer, font, fps_string, 8, 8);
+		gfxPrint(fps_string, 8, 8);
 	}
 }

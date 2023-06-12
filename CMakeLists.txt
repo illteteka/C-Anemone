@@ -19,13 +19,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 if(PSP)
     target_link_libraries(${PROJECT_NAME} PRIVATE
-        SDL2_ttf
-		SDL2_image
-        freetype
-        m
-        bz2
+        SDL2_image
         png16
-		jpeg
+        jpeg
         z
     )
     create_pbp_file(

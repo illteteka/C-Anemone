@@ -1,15 +1,4 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-
-#include "../globals.h"
-#include "../engine/input.h"
-#include "../engine/gfx.h"
-
-#include "guy.h"
+#include "../include.h"
 
 #define MAX_GUY 32
 
@@ -24,6 +13,11 @@ struct guy
 
 int guyCount = 0;
 struct guy guyData[MAX_GUY];
+
+void guySetTexture(SDL_Texture* texture)
+{
+	guy_local_texture = texture;
+}
 
 void guyInit()
 {
@@ -64,18 +58,13 @@ void guyUpdate(float dt)
 	}
 }
 
-void guySetTexture(SDL_Texture* texture)
-{
-	guy_local_texture = texture;
-}
-
-void guyDraw(SDL_Renderer *renderer)
+void guyDraw()
 {
 	int i = 0;
 	while (i < sizeof(guyData) / sizeof(guyData[0]))
 	{
 		if (guyData[i].active)
-			gfxDrawImageRel(renderer, guy_local_texture, guyData[i].x, guyData[i].y, 32, 32);
+			gfxDrawImageRel(guy_local_texture, guyData[i].x, guyData[i].y, 32, 32);
 
 	    i++;
 	}

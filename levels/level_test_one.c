@@ -1,14 +1,4 @@
-#include <SDL2/SDL.h>
-
-#include "level_test_one.h"
-#include "level_test_two.h"
-
-#include "../objects/guy.h"
-#include "../engine/input.h"
-#include "../engine/gfx.h"
-#include "../globals.h"
-#include "../sds.h"
-#include "../instances.h"
+#include "../include.h"
 
 void levelTestOneLevel()
 {
@@ -51,18 +41,6 @@ void levelTestOneUpdate(float dt)
 {
 	guyUpdate(dt);
 
-	// Simulate lag to test delta time
-	if (triangle_key == _ON)
-	{
-		int lag = 0;
-		while (lag < 10000)
-		{
-			sds ohno = sdsnew(",faweafwawfawfawfawf ");
-			sdsfree(ohno);
-			lag++;
-		}
-	}
-
 	if (square_key == _PRESS)
 	{
 		levelTestTwoInit();
@@ -88,13 +66,13 @@ void levelTestOneUpdate(float dt)
 		cameraZoom += 0.1;
 }
 
-void levelTestOneDraw(SDL_Renderer *renderer)
+void levelTestOneDraw()
 {
-	guyDraw(renderer);
-
+	guyDraw();
+	
 	gfxSetColor(0,255,0);
-	gfxTriangleRel(renderer, 379, 61, 453, 66, 381, 178);
+	gfxTriangleRel(379, 61, 453, 66, 381, 178);
 
 	gfxSetColor(184,148,237);
-	gfxLineRel(renderer, 99, 40, 94, 111);
+	gfxLineRel(99, 40, 94, 111);
 }

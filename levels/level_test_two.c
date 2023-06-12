@@ -1,13 +1,4 @@
-#include <SDL2/SDL.h>
-
-#include "level_test_one.h"
-#include "level_test_two.h"
-
-#include "../objects/guy.h"
-#include "../engine/input.h"
-#include "../globals.h"
-#include "../sds.h"
-#include "../instances.h"
+#include "../include.h"
 
 void levelTestTwoLevel()
 {
@@ -33,7 +24,7 @@ void levelTestTwoUpdate(float dt)
 	}
 }
 
-void levelTestTwoDraw(SDL_Renderer *renderer)
+void levelTestTwoDraw()
 {
-	guyDraw(renderer);
+	guyDraw();
 }
