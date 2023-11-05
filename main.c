@@ -4,7 +4,7 @@ float cameraX = 0;
 float cameraY = 0;
 float cameraZoom = 1;
 
-float sleep = 0;
+float rest = 0;
 
 SDL_Window* win;
 SDL_Renderer* renderer;
@@ -14,7 +14,7 @@ SDL_Texture* spr_sample_32;
 
 int LEVEL_SWITCH = LEVEL_TEST_1;
 
-void resetCamera()
+void resetCamera(void)
 {
 	cameraX = 0;
 	cameraY = 0;
@@ -31,13 +31,13 @@ void loadTextures(SDL_Renderer *renderer)
 	guySetTexture(spr_sample_32);
 }
 
-void destroyTextures()
+void destroyTextures(void)
 {
 	SDL_DestroyTexture(spr_font);
 	SDL_DestroyTexture(spr_sample_32);
 }
 
-void load()
+void load(void)
 {
 	devInit();
 	inputInit();
@@ -55,15 +55,17 @@ void update(float dt)
 {
 	devUpdateDebugMenu(dt);
 
-	inputUpdate(dt);
+	inputUpdate();
 
-	if (sleep == 0)
+	if (rest == 0)
+	{
 		updateGame(dt);
+	}
 	else
-		sleep = fmax(sleep - dt, 0);
+		rest = fmax(rest - dt, 0);
 }
 
-void drawGame()
+void drawGame(void)
 {
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
 		levelTestOneDraw();
@@ -75,6 +77,7 @@ void draw(SDL_Renderer *renderer, float fps)
 {	
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	
 	drawGame();
 
@@ -85,7 +88,7 @@ void draw(SDL_Renderer *renderer, float fps)
 
 int main(int argc, char *argv[])
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	
 	// Function implementation
 	// Initialize SDL2
@@ -98,13 +101,33 @@ int main(int argc, char *argv[])
 
 	load();
 
-	win = SDL_CreateWindow(
-	"window",
-	SDL_WINDOWPOS_UNDEFINED,
-	SDL_WINDOWPOS_UNDEFINED,
-	SCREEN_WIDTH,
-	SCREEN_HEIGHT,
-	0);
+	#if defined(__APPLE__) || defined(__linux__)
+		SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
+
+		win = SDL_CreateWindow(
+		"anemone alpha",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		SCREEN_WIDTH * (GLOBAL_SCALE/2),
+		SCREEN_HEIGHT * (GLOBAL_SCALE/2),
+		SDL_WINDOW_ALLOW_HIGHDPI);
+	#elif defined(_WIN64)
+		win = SDL_CreateWindow(
+		"anemone alpha",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		SCREEN_WIDTH * GLOBAL_SCALE,
+		SCREEN_HEIGHT * GLOBAL_SCALE,
+		0);
+	#else
+		win = SDL_CreateWindow(
+		"anemone alpha",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		SCREEN_WIDTH,
+		SCREEN_HEIGHT,
+		0);
+	#endif
 
 	if (!win)
 	{
@@ -118,22 +141,22 @@ int main(int argc, char *argv[])
 	gfxSetRenderer(renderer);
 
 	loadTextures(renderer);
-	
+
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
 		levelTestOneInit();
 	else if (LEVEL_SWITCH == LEVEL_TEST_2)
 		levelTestTwoInit();
 
 	int frames_drawn = 0;
-	uint fps_counter = 0;
+	unsigned int fps_counter = 0;
 	float fps = 0.0f;
-	uint prev_ticks = SDL_GetTicks();
+	Uint64 prev_ticks = SDL_GetTicks64();
 
 	int running = 1;
 	SDL_Event e;
 	while (running)
 	{
-		float dt = 59.0f/fmax(fps,1.0f);
+		float dt = 60.0f/fmax(fps,1.0f);
 		if (dt > 10)
 		{
 			dt = 1;
@@ -152,15 +175,15 @@ int main(int argc, char *argv[])
 		update(dt);
 		draw(renderer, fps);
 
-		uint ticks_now = SDL_GetTicks();
-		uint diff = ticks_now - prev_ticks;
+		Uint64 ticks_now = SDL_GetTicks64();
+		Uint64 diff = ticks_now - prev_ticks;
 		fps_counter += diff;
 		prev_ticks = ticks_now;
 		frames_drawn++;
 
 		if(fps_counter >= 1000)
 		{
-			fps = (float)frames_drawn / (float)(fps_counter/1000.0f);
+			fps = (float)frames_drawn;
 			frames_drawn = 0;
 			fps_counter = 0;
 		}

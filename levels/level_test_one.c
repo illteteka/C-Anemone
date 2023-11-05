@@ -70,9 +70,9 @@ void levelTestOneDraw()
 {
 	guyDraw();
 	
-	gfxSetColor(0,255,0);
+	gfxSetColor(0,255,0,255);
 	gfxTriangleRel(379, 61, 453, 66, 381, 178);
 
-	gfxSetColor(184,148,237);
+	gfxSetColor(184,148,237,255);
 	gfxLineRel(99, 40, 94, 111);
 }

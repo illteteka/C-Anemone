@@ -1,6 +1,6 @@
 #include "include.h"
 
-void instancesInit()
+void instancesInit(void)
 {
 	guyInit();
 }
