@@ -7,12 +7,13 @@
 
 void gfxSetRenderer(SDL_Renderer *renderer);
 void gfxFontSetTexture(SDL_Texture* texture);
-void gfxFontLoadRects();
-void gfxFontFree();
-void gfxSetColor(int r, int g, int b);
-int gfxGetColorR();
-int gfxGetColorG();
-int gfxGetColorB();
+void gfxFontLoadRects(void);
+void gfxFontFree(void);
+void gfxSetColor(int r, int g, int b, int a);
+int gfxGetColorR(void);
+int gfxGetColorG(void);
+int gfxGetColorB(void);
+int gfxGetColorA(void);
 void gfxRectangle(int x, int y, int w, int h);
 void gfxRectangleRel(int x, int y, int w, int h);
 void gfxTriangle(int x, int y, int x2, int y2, int x3, int y3);
@@ -25,6 +26,7 @@ void gfxPrintf(const char* str, int x, int y, int limit, int align);
 void gfxDrawImage(SDL_Texture *texture, int x, int y, int w, int h);
 void gfxDrawImageRel(SDL_Texture *texture, float x, float y, float w, float h);
 void gfxDrawRect(SDL_Texture *texture, SDL_Rect rect, int x, int y, int w, int h);
+void gfxDrawRectScale(SDL_Texture *texture, SDL_Rect rect, int x, int y, int w, int h, int angle, float scale);
 void gfxDrawRectRel(SDL_Texture *texture, SDL_Rect rect, float x, float y, float w, float h);
 void gfxDrawRectangleThickRel(int x, int y, int w, int h, int t);
 void gfxDrawRectangleThick(int x, int y, int w, int h, int t);

@@ -1,9 +1,24 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
-#include <pspkernel.h>
-#include <pspdebug.h>
-#include <pspctrl.h>
+#ifdef __APPLE__
+	#include <SDL2_image/SDL_image.h>
+	#define GLOBAL_SCALE 4
+#elif defined(__linux__)
+	#include <SDL2/SDL_image.h>
+	#define GLOBAL_SCALE 4
+#elif defined(_WIN64)
+	#include <SDL2/SDL_image.h>
+	#define GLOBAL_SCALE 2
+#else
+	#include <SDL2/SDL_image.h>
+	#include <oslib/oslib.h>
+
+	#include <pspkernel.h>
+	#include <pspdebug.h>
+	#include <pspctrl.h>
+
+	#define GLOBAL_SCALE 1
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,10 +48,10 @@
 #define LEVEL_TEST_2 1
 
 extern int LEVEL_SWITCH;
-extern float sleep;
+extern float rest;
 extern float cameraX;
 extern float cameraY;
 extern float cameraZoom;
-void resetCamera();
+void resetCamera(void);
 
 #endif

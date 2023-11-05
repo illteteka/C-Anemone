@@ -17,7 +17,7 @@ int getSquare(int n)
 
 void reverseString(char* str)
 {
-	int length = strlen(str);
+	int length = (int)(strlen(str));
 	int i, j;
 	for (i = 0, j = length - 1; i < j; i++, j--)
 	{
@@ -66,7 +66,7 @@ void hsl(int h, int s, int l)
 {
 	if (s <= 0)
 	{
-		gfxSetColor(255, 255, 255);
+		gfxSetColor(255, 255, 255, 255);
 		return;
 	}
 
@@ -113,5 +113,5 @@ void hsl(int h, int s, int l)
 			break;
 	}
 
-	gfxSetColor((int)((r + m) * 255), (int)((g + m) * 255), (int)((b + m) * 255));
+	gfxSetColor((int)((r + m) * 255), (int)((g + m) * 255), (int)((b + m) * 255), 255);
 }

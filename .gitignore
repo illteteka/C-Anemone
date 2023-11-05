@@ -1,5 +1,6 @@
 build/CMakeFiles
 build/anemone-alpha
+build/anemone-alpha.prx
 build/cmake_install.cmake
 build/CMakeCache.txt
 build/EBOOT.PBP
@@ -8,3 +9,12 @@ build/PARAM.SFO
 *.DS_Store
 .DS_Store
 *.sav
+CMakeCache.txt
+CMakeFiles/
+Makefile
+build/SDL2.dll
+build/SDL2_image.dll
+build/SDL2_mixer.dll
+build/anemone-alpha.exe
+cmake_install.cmake
+platform/xcode/anemone-alpha/anemone-alpha.xcodeproj/project.xcworkspace/xcuserdata/*

@@ -1,9 +1,9 @@
 #include "../include.h"
 
 bool devDebugWindow = false;
-char fps_string[8] = "";
+char fps_string[9] = "";
 
-void devInit()
+void devInit(void)
 {
 	devDebugWindow = false;
 }
@@ -20,9 +20,9 @@ void devDrawDebugMenu(float fps)
 	{
 		snprintf(fps_string, sizeof(fps_string), "fps: %i", (int)fps);
 
-		gfxSetColor(0, 0, 255);
+		gfxSetColor(0, 0, 255, 255);
 		gfxRectangle(0,0,72,32);
-		gfxSetColor(255, 255, 255);
+		gfxSetColor(255, 255, 255, 255);
 		gfxPrint(fps_string, 8, 8);
 	}
 }
