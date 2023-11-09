@@ -37,12 +37,6 @@ void destroyTextures(void)
 	SDL_DestroyTexture(spr_sample_32);
 }
 
-void load(void)
-{
-	devInit();
-	inputInit();
-}
-
 void updateGame(float dt)
 {
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
@@ -99,8 +93,6 @@ int main(int argc, char *argv[])
 		SDL_GetError());
 	}
 
-	load();
-
 	#if defined(__APPLE__) || defined(__linux__)
 		SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
 
@@ -135,6 +127,9 @@ int main(int argc, char *argv[])
 		"SDL_Error: %s\n",
 		SDL_GetError());
 	}
+
+	devInit();
+	inputInit();
 
 	SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, 0);
 	SDL_RenderSetVSync(renderer, 1);
