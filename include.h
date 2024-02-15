@@ -35,6 +35,7 @@
 #include "levels/level_test_two.h"
 
 #include "objects/guy.h"
+#include "objects/brush.h"
 
 #include "instances.h"
 

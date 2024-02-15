@@ -30,5 +30,8 @@ void gfxDrawRectScale(SDL_Texture *texture, SDL_Rect rect, int x, int y, int w, 
 void gfxDrawRectRel(SDL_Texture *texture, SDL_Rect rect, float x, float y, float w, float h);
 void gfxDrawRectangleThickRel(int x, int y, int w, int h, int t);
 void gfxDrawRectangleThick(int x, int y, int w, int h, int t);
+void gfxSetCanvas(SDL_Texture *canvas);
+void gfxResetCanvas(void);
+void gfxClear(void);
 
 #endif

@@ -63,6 +63,22 @@ void gfxFontFree(void)
 	free(font_rect);
 }
 
+void gfxClear(void)
+{
+	SDL_SetRenderDrawColor(local_renderer, gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a);
+	SDL_RenderClear(local_renderer);
+}
+
+void gfxSetCanvas(SDL_Texture *canvas)
+{
+	SDL_SetRenderTarget(local_renderer, canvas);
+}
+
+void gfxResetCanvas(void)
+{
+	SDL_SetRenderTarget(local_renderer, NULL);
+}
+
 void gfxSetColor(int r, int g, int b, int a)
 {
 	if (a != 255 || (gfxColor.a != 255 && a == 255))
