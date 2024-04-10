@@ -55,4 +55,18 @@ extern float cameraY;
 extern float cameraZoom;
 void resetCamera(void);
 
+extern SDL_Renderer* renderer;
+extern SDL_Texture* canvas_example;
+
+#ifdef __PSP__
+
+#else
+	extern SDL_Texture* canvas_scale;
+#endif
+
+extern int test_x;
+extern int test_y;
+extern int test_w;
+extern int test_h;
+
 #endif

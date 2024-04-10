@@ -61,20 +61,41 @@ void brushUpdate(float dt)
 		
 			if (cross_key == _ON)
 			{
-				gfxSetCanvas(brush_local_canvas);
-				//gfxSetColor(255, 0, 0, 255);
-				//gfxRectangle(brushData[i].x, brushData[i].y, 3, 3);
-				
-				gfxDrawImageRel(brush_guy_local_texture, brushData[i].x, brushData[i].y, 32, 32);
-				gfxResetCanvas();
+				/*gfxSetCanvas(canvas_example);
+				gfxSetColor(255, 0, 0, 255);
+				gfxRectangle(brushData[i].x, brushData[i].y, 3, 3);
+				gfxSetColor(255, 255, 255, 255);
+				gfxDrawImage(canvas_example, brushData[i].x, brushData[i].y, 32, 32);
+				gfxResetCanvas();*/
+				// void* pixels;
+				// int pitch;
+				// SDL_LockTexture(canvas_example, NULL, &pixels, &pitch);
+
+				// // Access the pixel data and draw a rectangle (e.g., white rectangle)
+				// Uint32* pixelData = (Uint32*)pixels;
+				// SDL_Rect rect = { (int) brushData[i].x, (int) brushData[i].y, 2, 2 };  // Rectangle coordinates and size
+				// Uint32 color = SDL_MapRGB(SDL_AllocFormat(SDL_PIXELFORMAT_ARGB8888), 255, 255, 255);  // White color
+
+				// for (int y = rect.y; y < rect.y + rect.h; y++) {
+				// 	for (int x = rect.x; x < rect.x + rect.w; x++) {
+				// 		pixelData[y * (pitch / 4) + x] = color;
+				// 	}
+				// }
+
+				// // Unlock the texture
+				// SDL_UnlockTexture(canvas_example);
+
+				SDL_SetRenderTarget(renderer, canvas_example);
+				gfxDrawImage(brush_guy_local_texture, brushData[i].x, brushData[i].y, 32, 32);
+				SDL_SetRenderTarget(renderer, NULL);
 			}
 
 			if (triangle_key == _PRESS)
 			{
-				gfxSetCanvas(brush_local_canvas);
-				gfxSetColor(0, 255, 0, 255);
-				gfxClear();
-				gfxResetCanvas();
+				// gfxSetCanvas(canvas_example);
+				// gfxSetColor(0, 255, 0, 255);
+				// gfxClear();
+				// gfxResetCanvas();
 			}
 
 		}

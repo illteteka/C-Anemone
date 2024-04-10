@@ -6,7 +6,6 @@
 int font_max = 96;
 SDL_Rect* font_rect;
 SDL_Texture* font_spr = NULL;
-SDL_Renderer* local_renderer = NULL;
 
 struct col
 {
@@ -17,11 +16,6 @@ struct col
 };
 
 struct col gfxColor = {0, 0, 0, 255};
-
-void gfxSetRenderer(SDL_Renderer *renderer)
-{
-	local_renderer = renderer;
-}
 
 void gfxFontSetTexture(SDL_Texture* texture)
 {
@@ -65,18 +59,18 @@ void gfxFontFree(void)
 
 void gfxClear(void)
 {
-	SDL_SetRenderDrawColor(local_renderer, gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a);
-	SDL_RenderClear(local_renderer);
+	SDL_SetRenderDrawColor(renderer, gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a);
+	SDL_RenderClear(renderer);
 }
 
 void gfxSetCanvas(SDL_Texture *canvas)
 {
-	SDL_SetRenderTarget(local_renderer, canvas);
+	SDL_SetRenderTarget(renderer, canvas);
 }
 
 void gfxResetCanvas(void)
 {
-	SDL_SetRenderTarget(local_renderer, NULL);
+	SDL_SetRenderTarget(renderer, NULL);
 }
 
 void gfxSetColor(int r, int g, int b, int a)
@@ -115,9 +109,9 @@ int gfxGetColorA(void)
 
 void gfxRectangle(int x, int y, int w, int h)
 {
-	SDL_Rect temp_rect = {x * GLOBAL_SCALE, y * GLOBAL_SCALE, w * GLOBAL_SCALE, h * GLOBAL_SCALE};
-	SDL_SetRenderDrawColor(local_renderer, gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a);
-	SDL_RenderFillRect(local_renderer, &temp_rect);
+	SDL_Rect temp_rect = {x, y, w, h};
+	SDL_SetRenderDrawColor(renderer, gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a);
+	SDL_RenderFillRect(renderer, &temp_rect);
 }
 
 void gfxRectangleRel(int x, int y, int w, int h)
@@ -131,9 +125,9 @@ void gfxRectangleRel(int x, int y, int w, int h)
 
 void gfxTriangle(int x, int y, int x2, int y2, int x3, int y3)
 {
-	SDL_Vertex vertex_1 = {{x * GLOBAL_SCALE, y * GLOBAL_SCALE}, {gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a}, {1, 1}};
-	SDL_Vertex vertex_2 = {{x2 * GLOBAL_SCALE, y2 * GLOBAL_SCALE}, {gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a}, {1, 1}};
-	SDL_Vertex vertex_3 = {{x3 * GLOBAL_SCALE, y3 * GLOBAL_SCALE}, {gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a}, {1, 1}};
+	SDL_Vertex vertex_1 = {{x, y}, {gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a}, {1, 1}};
+	SDL_Vertex vertex_2 = {{x2, y2}, {gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a}, {1, 1}};
+	SDL_Vertex vertex_3 = {{x3, y3}, {gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a}, {1, 1}};
 
 	SDL_Vertex vertices[] = {
 	    vertex_1,
@@ -141,7 +135,7 @@ void gfxTriangle(int x, int y, int x2, int y2, int x3, int y3)
 	    vertex_3
 	};
 
-	SDL_RenderGeometry(local_renderer, NULL, vertices, 3, NULL, 0);
+	SDL_RenderGeometry(renderer, NULL, vertices, 3, NULL, 0);
 }
 
 void gfxTriangleRel(int x, int y, int x2, int y2, int x3, int y3)
@@ -157,8 +151,8 @@ void gfxTriangleRel(int x, int y, int x2, int y2, int x3, int y3)
 
 void gfxLine(int x, int y, int x2, int y2)
 {
-	SDL_SetRenderDrawColor(local_renderer, gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a);
-	SDL_RenderDrawLine(local_renderer, x * GLOBAL_SCALE, y * GLOBAL_SCALE, x2 * GLOBAL_SCALE, y2 * GLOBAL_SCALE);
+	SDL_SetRenderDrawColor(renderer, gfxColor.r, gfxColor.g, gfxColor.b, gfxColor.a);
+	SDL_RenderDrawLine(renderer, x, y, x2, y2);
 }
 
 void gfxLineRel(int x, int y, int x2, int y2)
@@ -206,8 +200,8 @@ void gfxPrintf(const char* str, int x, int y, int limit, int align)
 
 void gfxDrawImage(SDL_Texture *texture, int x, int y, int w, int h)
 {
-	SDL_Rect img_rect = {x * GLOBAL_SCALE, y * GLOBAL_SCALE, w * GLOBAL_SCALE, h * GLOBAL_SCALE};
-	SDL_RenderCopy(local_renderer, texture, NULL, &img_rect);
+	SDL_Rect img_rect = {x, y, w, h};
+	SDL_RenderCopy(renderer, texture, NULL, &img_rect);
 }
 
 void gfxDrawImageRel(SDL_Texture *texture, float x, float y, float w, float h)
@@ -221,18 +215,18 @@ void gfxDrawImageRel(SDL_Texture *texture, float x, float y, float w, float h)
 
 void gfxDrawRect(SDL_Texture *texture, SDL_Rect rect, int x, int y, int w, int h)
 {
-	SDL_Rect img_rect = {x * GLOBAL_SCALE, y * GLOBAL_SCALE, w * GLOBAL_SCALE, h * GLOBAL_SCALE};
-	SDL_RenderCopy(local_renderer, texture, &rect, &img_rect);
+	SDL_Rect img_rect = {x, y, w, h};
+	SDL_RenderCopy(renderer, texture, &rect, &img_rect);
 }
 
 void gfxDrawRectScale(SDL_Texture *texture, SDL_Rect rect, int x, int y, int w, int h, int angle, float scale)
 {
-	int xx = (int) ((float) x * (float) GLOBAL_SCALE * scale);
-	int yy = (int) ((float) y * (float) GLOBAL_SCALE * scale);
-	int ww = (int) ((float) w * (float) GLOBAL_SCALE * scale);
-	int hh = (int) ((float) h * (float) GLOBAL_SCALE * scale);
+	int xx = (int) ((float) x * scale);
+	int yy = (int) ((float) y * scale);
+	int ww = (int) ((float) w * scale);
+	int hh = (int) ((float) h * scale);
 	SDL_Rect img_rect = {xx, yy, ww, hh};
-	SDL_RenderCopyEx(local_renderer, texture, &rect, &img_rect, angle, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer, texture, &rect, &img_rect, angle, NULL, SDL_FLIP_NONE);
 }
 
 void gfxDrawRectRel(SDL_Texture *texture, SDL_Rect rect, float x, float y, float w, float h)

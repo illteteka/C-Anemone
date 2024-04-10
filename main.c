@@ -14,7 +14,18 @@ SDL_Texture* spr_sample_32;
 
 SDL_Texture *canvas_example;
 
+#ifdef __PSP__
+
+#else
+	SDL_Texture *canvas_scale;
+#endif
+
 int LEVEL_SWITCH = LEVEL_TEST_1;
+
+int test_x = 0;
+int test_y = 0;
+int test_w = 0;
+int test_h = 0;
 
 void resetCamera(void)
 {
@@ -23,7 +34,7 @@ void resetCamera(void)
 	cameraZoom = 1;
 }
 
-void loadTextures(SDL_Renderer *renderer)
+void loadTextures(void)
 {
 	spr_font = IMG_LoadTexture(renderer, "assets/font.png");
 	gfxFontSetTexture(spr_font);
@@ -33,7 +44,27 @@ void loadTextures(SDL_Renderer *renderer)
 	guySetTexture(spr_sample_32);
 	brushGuySetTexture(spr_sample_32);
 
-	canvas_example = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+	// create canvas
+	/*
+	[0] = SDL_PIXELFORMAT_ABGR8888, //first
+    [1] = SDL_PIXELFORMAT_ARGB8888,
+            */
+	canvas_example = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+
+	// clear this canvas
+	//SDL_SetColorKey(canvas_example, SDL_TRUE, SDL_MapRGB(canvas_example->format, 255, 0, 0));
+	
+	SDL_SetTextureBlendMode(canvas_example, SDL_BLENDMODE_BLEND);
+
+	SDL_SetRenderTarget(renderer, canvas_example);
+
+	//SDL_SetTextureBlendMode(canvas_example, SDL_BLENDMODE_BLEND);
+	//SDL_SetTextureAlphaMod(canvas_example, 255);
+
+
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderTarget(renderer, NULL);
 
 	// Clear the new canvas
 	//gfxSetCanvas(&canvas_example);
@@ -41,8 +72,18 @@ void loadTextures(SDL_Renderer *renderer)
 	//gfxClear();
 	//gfxResetCanvas();
 
-	brushSetCanvasTexture(canvas_example);
-	levelTestTwoSetCanvasTexture(canvas_example);
+	//brushSetCanvasTexture(canvas_example);
+	//levelTestTwoSetCanvasTexture(canvas_example);
+
+	#ifdef __PSP__
+
+	#else
+		canvas_scale = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+		SDL_SetRenderTarget(renderer, canvas_scale);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderClear(renderer);
+		SDL_SetRenderTarget(renderer, NULL);
+	#endif
 }
 
 void destroyTextures(void)
@@ -76,21 +117,44 @@ void update(float dt)
 
 void drawGame(void)
 {
+	gfxSetColor(0, 0, 255, 255);
+	gfxRectangle(10, 10, 100, 100);
+	gfxDrawImage(canvas_example, test_x, test_y, test_w, test_h);
+
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
 		levelTestOneDraw();
 	else if (LEVEL_SWITCH == LEVEL_TEST_2)
 		levelTestTwoDraw();
 }
 
-void draw(SDL_Renderer *renderer, float fps)
+void draw(float fps)
 {	
-	gfxSetColor(255, 255, 255, 255);
-	gfxClear();
+	#ifdef __PSP__
+
+	#else
+		SDL_SetRenderTarget(renderer, canvas_scale);
+	#endif
+
+	//gfxSetColor(255, 255, 255, 255);
+	//gfxClear();
+	//SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+	// Clear
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderClear(renderer);
+
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	
 	drawGame();
 
 	devDrawDebugMenu(fps);
+
+	#ifdef __PSP__
+
+	#else
+		SDL_SetRenderTarget(renderer, NULL);
+		gfxDrawImage(canvas_scale, 0, 0, 512 * GLOBAL_SCALE, 512 * GLOBAL_SCALE);
+	#endif
 
 	SDL_RenderPresent(renderer);
 }
@@ -146,11 +210,10 @@ int main(int argc, char *argv[])
 	devInit();
 	inputInit();
 
-	SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, 0);
+	renderer = SDL_CreateRenderer(win, -1, 0);
 	SDL_RenderSetVSync(renderer, 1);
-	gfxSetRenderer(renderer);
 
-	loadTextures(renderer);
+	loadTextures();
 
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
 		levelTestOneInit();
@@ -183,7 +246,7 @@ int main(int argc, char *argv[])
 		}
 
 		update(dt);
-		draw(renderer, fps);
+		draw(fps);
 
 		Uint64 ticks_now = SDL_GetTicks64();
 		Uint64 diff = ticks_now - prev_ticks;

@@ -22,6 +22,13 @@ void levelTestTwoInit()
 	instancesInit();
 	levelTestTwoLevel();
 	resetCamera();
+
+	test_x = 0;
+	test_y = 0;
+	test_w = 512;
+	test_h = 512;
+
+	SDL_SetTextureAlphaMod(canvas_example, 255);
 }
 
 void levelTestTwoUpdate(float dt)
@@ -36,6 +43,7 @@ void levelTestTwoUpdate(float dt)
 
 void levelTestTwoDraw()
 {
-	gfxDrawImage(level_test_two_local_canvas, 0, 0, 512, 512);
+	//SDL_SetTextureAlphaMod(canvas_example, 255);
+	//gfxDrawImage(canvas_example, 0, 0, 512, 512);
 	brushDraw();
 }
