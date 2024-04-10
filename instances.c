@@ -3,4 +3,5 @@
 void instancesInit(void)
 {
 	guyInit();
+	brushInit();
 }

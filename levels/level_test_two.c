@@ -1,9 +1,12 @@
 #include "../include.h"
 
+/*
+	Canvas example room
+*/
+
 void levelTestTwoLevel()
 {
-	guyNew(32, 32);
-	guyNew(64, 64);
+	brushNew((int) SCREEN_WIDTH/2, (int) SCREEN_HEIGHT/2);
 }
 
 void levelTestTwoInit()
@@ -16,7 +19,7 @@ void levelTestTwoInit()
 
 void levelTestTwoUpdate(float dt)
 {
-	guyUpdate(dt);
+	brushUpdate(dt);
 
 	if (square_key == _PRESS)
 	{
@@ -26,5 +29,5 @@ void levelTestTwoUpdate(float dt)
 
 void levelTestTwoDraw()
 {
-	guyDraw();
+	brushDraw();
 }

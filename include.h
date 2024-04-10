@@ -35,6 +35,7 @@
 #include "levels/level_test_two.h"
 
 #include "objects/guy.h"
+#include "objects/brush.h"
 
 #include "instances.h"
 
@@ -53,5 +54,15 @@ extern float cameraX;
 extern float cameraY;
 extern float cameraZoom;
 void resetCamera(void);
+
+extern SDL_Renderer* renderer;
+extern SDL_Texture* canvas_example;
+extern SDL_Texture* canvas_eraser;
+
+#ifdef __PSP__
+
+#else
+	extern SDL_Texture* canvas_scale;
+#endif
 
 #endif
