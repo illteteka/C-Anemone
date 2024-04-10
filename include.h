@@ -65,9 +65,4 @@ extern SDL_Texture* canvas_eraser;
 	extern SDL_Texture* canvas_scale;
 #endif
 
-extern int test_x;
-extern int test_y;
-extern int test_w;
-extern int test_h;
-
 #endif

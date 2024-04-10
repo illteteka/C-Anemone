@@ -35,13 +35,6 @@ void levelTestOneInit()
 	instancesInit();
 	levelTestOneLevel();
 	resetCamera();
-
-	test_x = 256;
-	test_y = 256;
-	test_w = 1;
-	test_h = 1;
-
-	SDL_SetTextureAlphaMod(canvas_example, 0);
 }
 
 void levelTestOneUpdate(float dt)
@@ -75,7 +68,6 @@ void levelTestOneUpdate(float dt)
 
 void levelTestOneDraw()
 {
-	//SDL_SetTextureAlphaMod(canvas_example, 40);
 	guyDraw();
 	
 	gfxSetColor(0,255,0,255);

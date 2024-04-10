@@ -2,7 +2,6 @@
 
 #define MAX_BRUSH 2
 
-SDL_Texture *brush_local_canvas = NULL;
 SDL_Texture* brush_guy_local_texture = NULL;
 
 struct brush
@@ -18,11 +17,6 @@ struct brush brushData[MAX_BRUSH];
 void brushGuySetTexture(SDL_Texture* texture)
 {
 	brush_guy_local_texture = texture;
-}
-
-void brushSetCanvasTexture(SDL_Texture *canvas)
-{
-	brush_local_canvas = canvas;
 }
 
 void brushInit()

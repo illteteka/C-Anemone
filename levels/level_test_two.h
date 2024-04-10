@@ -5,6 +5,5 @@ void levelTestTwoInit();
 void levelTestTwoLevel();
 void levelTestTwoUpdate(float dt);
 void levelTestTwoDraw();
-void levelTestTwoSetCanvasTexture(SDL_Texture *canvas);
 
 #endif

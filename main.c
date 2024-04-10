@@ -23,11 +23,6 @@ SDL_Texture* canvas_eraser;
 
 int LEVEL_SWITCH = LEVEL_TEST_1;
 
-int test_x = 0;
-int test_y = 0;
-int test_w = 0;
-int test_h = 0;
-
 void resetCamera(void)
 {
 	cameraX = 0;
