@@ -57,6 +57,7 @@ void resetCamera(void);
 
 extern SDL_Renderer* renderer;
 extern SDL_Texture* canvas_example;
+extern SDL_Texture* canvas_eraser;
 
 #ifdef __PSP__
 

@@ -12,12 +12,13 @@ SDL_Renderer* renderer;
 SDL_Texture* spr_font;
 SDL_Texture* spr_sample_32;
 
-SDL_Texture *canvas_example;
+SDL_Texture* canvas_example;
+SDL_Texture* canvas_eraser;
 
 #ifdef __PSP__
 
 #else
-	SDL_Texture *canvas_scale;
+	SDL_Texture* canvas_scale;
 #endif
 
 int LEVEL_SWITCH = LEVEL_TEST_1;
@@ -44,45 +45,17 @@ void loadTextures(void)
 	guySetTexture(spr_sample_32);
 	brushGuySetTexture(spr_sample_32);
 
-	// create canvas
-	/*
-	[0] = SDL_PIXELFORMAT_ABGR8888, //first
-    [1] = SDL_PIXELFORMAT_ARGB8888,
-            */
 	canvas_example = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+	gfxNewCanvas(canvas_example);
 
-	// clear this canvas
-	//SDL_SetColorKey(canvas_example, SDL_TRUE, SDL_MapRGB(canvas_example->format, 255, 0, 0));
-	
-	SDL_SetTextureBlendMode(canvas_example, SDL_BLENDMODE_BLEND);
-
-	SDL_SetRenderTarget(renderer, canvas_example);
-
-	//SDL_SetTextureBlendMode(canvas_example, SDL_BLENDMODE_BLEND);
-	//SDL_SetTextureAlphaMod(canvas_example, 255);
-
-
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
-	SDL_RenderClear(renderer);
-	SDL_SetRenderTarget(renderer, NULL);
-
-	// Clear the new canvas
-	//gfxSetCanvas(&canvas_example);
-	//gfxSetColor(0, 255, 0, 255); // note: clearing canvas color does nothing on the psp
-	//gfxClear();
-	//gfxResetCanvas();
-
-	//brushSetCanvasTexture(canvas_example);
-	//levelTestTwoSetCanvasTexture(canvas_example);
+	canvas_eraser = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+	gfxNewCanvas(canvas_eraser);
 
 	#ifdef __PSP__
 
 	#else
 		canvas_scale = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
-		SDL_SetRenderTarget(renderer, canvas_scale);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-		SDL_RenderClear(renderer);
-		SDL_SetRenderTarget(renderer, NULL);
+		gfxNewCanvas(canvas_scale);
 	#endif
 }
 
@@ -91,6 +64,13 @@ void destroyTextures(void)
 	SDL_DestroyTexture(spr_font);
 	SDL_DestroyTexture(spr_sample_32);
 	SDL_DestroyTexture(canvas_example);
+	SDL_DestroyTexture(canvas_eraser);
+
+	#ifdef __PSP__
+
+	#else
+		SDL_DestroyTexture(canvas_scale);
+	#endif
 }
 
 void updateGame(float dt)
@@ -117,9 +97,16 @@ void update(float dt)
 
 void drawGame(void)
 {
-	gfxSetColor(0, 0, 255, 255);
-	gfxRectangle(10, 10, 100, 100);
-	gfxDrawImage(canvas_example, test_x, test_y, test_w, test_h);
+	bool example_canvas_visible = (LEVEL_SWITCH == LEVEL_TEST_2);
+
+	// Shadow example
+	gfxSetColor(0, 0, 0, 64);
+	gfxDrawCanvas(canvas_example, 4, 4, example_canvas_visible);
+
+	gfxSetColor(255, 255, 255, 255);
+	gfxDrawCanvas(canvas_example, 0, 0, example_canvas_visible);
+
+	gfxDrawCanvas(canvas_eraser, 0, 0, false);
 
 	if (LEVEL_SWITCH == LEVEL_TEST_1)
 		levelTestOneDraw();
@@ -132,12 +119,8 @@ void draw(float fps)
 	#ifdef __PSP__
 
 	#else
-		SDL_SetRenderTarget(renderer, canvas_scale);
+		gfxSetCanvas(canvas_scale);
 	#endif
-
-	//gfxSetColor(255, 255, 255, 255);
-	//gfxClear();
-	//SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
 	// Clear
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -152,7 +135,7 @@ void draw(float fps)
 	#ifdef __PSP__
 
 	#else
-		SDL_SetRenderTarget(renderer, NULL);
+		gfxResetCanvas();
 		gfxDrawImage(canvas_scale, 0, 0, 512 * GLOBAL_SCALE, 512 * GLOBAL_SCALE);
 	#endif
 
