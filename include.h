@@ -48,6 +48,8 @@
 #define LEVEL_TEST_1 0
 #define LEVEL_TEST_2 1
 
+#define CANVAS_SIZE 512
+
 extern int LEVEL_SWITCH;
 extern float rest;
 extern float cameraX;

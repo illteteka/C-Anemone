@@ -260,7 +260,7 @@ void gfxDrawCanvas(SDL_Texture *texture, float x, float y, bool visible)
 	{
 		SDL_SetTextureColorMod(texture, gfxColor.r, gfxColor.g, gfxColor.b);
 		SDL_SetTextureAlphaMod(texture, gfxColor.a);
-		SDL_Rect temp_rect = {(int) x, (int) y, 512, 512};
+		SDL_Rect temp_rect = {(int) x, (int) y, CANVAS_SIZE, CANVAS_SIZE};
 		SDL_RenderCopy(renderer, texture, NULL, &temp_rect);
 	}
 	else
@@ -274,16 +274,16 @@ void gfxDrawCanvas(SDL_Texture *texture, float x, float y, bool visible)
 void gfxEraseCanvas(SDL_Texture *texture, SDL_Texture *eraser, int x, int y, int w, int h)
 {
 	// Clamp x and y so we don't have an invalid rect
-	int xx = fmax(fmin(x, 512), 0);
-	int yy = fmax(fmin(y, 512), 0);
+	int xx = fmax(fmin(x, CANVAS_SIZE), 0);
+	int yy = fmax(fmin(y, CANVAS_SIZE), 0);
 	int ww = w;
 	int hh = h;
 
-	SDL_Rect temp_rect = {0, 0, 512, 512};
-	SDL_Rect temp_top = {0, 0, 512, yy};
-	SDL_Rect temp_bottom = {0, yy + hh, 512, 512 - yy - hh};
+	SDL_Rect temp_rect = {0, 0, CANVAS_SIZE, CANVAS_SIZE};
+	SDL_Rect temp_top = {0, 0, CANVAS_SIZE, yy};
+	SDL_Rect temp_bottom = {0, yy + hh, CANVAS_SIZE, CANVAS_SIZE - yy - hh};
 	SDL_Rect temp_left = {0, yy, xx, hh};
-	SDL_Rect temp_right = {xx + ww, yy, 512 - xx - ww, hh};
+	SDL_Rect temp_right = {xx + ww, yy, CANVAS_SIZE - xx - ww, hh};
 
 	// Show the eraser
 	SDL_SetTextureAlphaMod(eraser, 255);

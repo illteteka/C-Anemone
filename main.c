@@ -40,10 +40,10 @@ void loadTextures(void)
 	guySetTexture(spr_sample_32);
 	brushGuySetTexture(spr_sample_32);
 
-	canvas_example = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+	canvas_example = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, CANVAS_SIZE, CANVAS_SIZE);
 	gfxNewCanvas(canvas_example);
 
-	canvas_eraser = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 512, 512);
+	canvas_eraser = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, CANVAS_SIZE, CANVAS_SIZE);
 	gfxNewCanvas(canvas_eraser);
 
 	#ifdef __PSP__
