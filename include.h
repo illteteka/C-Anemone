@@ -11,7 +11,6 @@
 	#define GLOBAL_SCALE 2
 #else
 	#include <SDL2/SDL_image.h>
-	#include <oslib/oslib.h>
 
 	#include <pspkernel.h>
 	#include <pspdebug.h>

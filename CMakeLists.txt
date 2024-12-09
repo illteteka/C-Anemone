@@ -36,9 +36,6 @@ if(PSP)
 		png16
 		jpeg
 		z
-		osl
-		pspaudiolib
-		pspaudio
 	)
 	create_pbp_file(
 		TARGET ${PROJECT_NAME}
